@@ -1,0 +1,16 @@
+# Environment files (default ignore all)
+**/.env*
+
+# But explicitly allow example files
+!**/.env.example
+!**/.env.dist
+!.env.example
+!.env.dist
+
+# Other ignores
+node_modules/
+*.log
+.DS_Store
+ai-agent/.venv/
+vendor/
+var/
