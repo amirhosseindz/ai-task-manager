@@ -1,0 +1,31 @@
+{
+    "folders": [
+        {
+            "name": "Root",
+            "path": "."
+        },
+        {
+            "name": "User Service",
+            "path": "./services/user-service"
+        },
+        {
+            "name": "Task Service", 
+            "path": "./services/task-service"
+        },
+        {
+            "name": "Notification Service",
+            "path": "./services/notification-service"
+        },
+        {
+            "name": "API Gateway",
+            "path": "./services/api-gateway"
+        },
+        {
+            "name": "AI Agent",
+            "path": "./ai-agent"
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "./ai-agent/.venv/bin/python"
+    }
+}
