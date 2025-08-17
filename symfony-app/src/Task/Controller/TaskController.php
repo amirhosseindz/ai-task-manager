@@ -75,7 +75,7 @@ class TaskController extends AbstractController
 
         return $this->json([
             'status' => 'success',
-            'data' => $task->toArray()
+            'data' => $task->toArray($this->normalizer)
         ]);
     }
 
@@ -181,11 +181,11 @@ class TaskController extends AbstractController
         }
 
         if (isset($data['priority'])) {
-            $task->setPriority($data['priority']);
+            $task->setPriority(TaskPriority::from($data['priority']));
         }
 
         if (isset($data['status'])) {
-            $task->setStatus($data['status']);
+            $task->setStatus(TaskStatus::from($data['status']));
         }
 
         if (isset($data['due_date'])) {
@@ -223,17 +223,17 @@ class TaskController extends AbstractController
             $this->taskRepository->save($task, true);
 
             // Publish appropriate events
-            $this->natsPublisher->publishTaskEvent('updated', $task->toArray());
+            $this->natsPublisher->publishTaskEvent('updated', $task->toArray($this->normalizer));
 
             // Special event if task was completed
             if ($oldStatus !== TaskStatus::DONE && $task->getStatus() === TaskStatus::DONE) {
-                $this->natsPublisher->publishTaskEvent('completed', $task->toArray());
+                $this->natsPublisher->publishTaskEvent('completed', $task->toArray($this->normalizer));
             }
 
             return $this->json([
                 'status' => 'success',
                 'message' => 'Task updated successfully',
-                'data' => $task->toArray()
+                'data' => $task->toArray($this->normalizer)
             ]);
 
         } catch (\Exception $e) {
@@ -257,7 +257,7 @@ class TaskController extends AbstractController
         }
 
         try {
-            $taskData = $task->toArray(); // Get data before deletion
+            $taskData = $task->toArray($this->normalizer); // Get data before deletion
             $this->taskRepository->remove($task, true);
 
             // Publish task deleted event
