@@ -124,10 +124,10 @@ class TaskRepository extends ServiceEntityRepository
         $stmt = $conn->prepare($sql);
         $result = $stmt->executeQuery([
             'userId' => $userId,
-            'todo' => TaskStatus::TODO,
-            'in_progress' => TaskStatus::IN_PROGRESS,
-            'done' => TaskStatus::DONE,
-            'high' => TaskPriority::High,
+            'todo' => TaskStatus::TODO->value,
+            'in_progress' => TaskStatus::IN_PROGRESS->value,
+            'done' => TaskStatus::DONE->value,
+            'high' => TaskPriority::High->value,
         ]);
 
         return $result->fetchAssociative();
