@@ -30,11 +30,11 @@ class Task
     #[Groups(['task:read', 'task:write'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, type: 'string', enumType: TaskPriority::class)]
+    #[ORM\Column(length: 20, type: 'string', enumType: TaskPriority::class)]
     #[Groups(['task:read', 'task:write'])]
     private TaskPriority $priority;
 
-    #[ORM\Column(length: 255, type: 'string', enumType: TaskStatus::class)]
+    #[ORM\Column(length: 20, type: 'string', enumType: TaskStatus::class)]
     #[Groups(['task:read', 'task:write'])]
     private TaskStatus $status;
 
