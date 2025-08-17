@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -175,5 +176,10 @@ class Task
         $this->status = TaskStatus::DONE;
 
         return $this;
+    }
+
+    public function toArray(NormalizerInterface $normalizer): array
+    {
+        return $normalizer->normalize($this, null, ['groups' => ['task:read']]);
     }
 }
