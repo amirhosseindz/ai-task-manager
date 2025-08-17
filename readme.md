@@ -1,292 +1,189 @@
-# AI-Powered Task Management System
+# 🤖 AI Task Manager
 
-A distributed microservices-based task management system with an intelligent AI agent that helps users create, prioritize, and manage tasks through natural language interactions.
+A smart task management app where you can create and manage tasks using natural language. Just tell the AI what you want to do, and it handles the rest!
 
-## 🎯 Project Goals
+## ✨ What it does
 
-This project demonstrates modern software architecture patterns including:
-- **Microservices Architecture** with Symfony 7
-- **Event-driven Communication** using NATS pub/sub
-- **AI Integration** with Python and MCP (Model Context Protocol) servers
-- **Real-time Collaboration** and intelligent task management
+- **Talk to AI**: "Hey AI, remind me to call mom tomorrow at 3 PM"
+- **Smart scheduling**: AI figures out priorities and deadlines
+- **Get notifications**: Email/SMS when tasks are due
+- **Natural language**: No complex forms, just chat with the AI
 
-## 🏗️ System Architecture
+## 🚀 Quick Start (5 minutes)
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   API Gateway   │    │  User Service   │    │  Task Service   │
-│   (Port 8000)   │    │   (Port 8001)   │    │   (Port 8002)   │
-│   Symfony 7     │    │   Symfony 7     │    │   Symfony 7     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                      │                        │
-         └──────────────────────┼────────────────────────┘
-                                │
-    ┌─────────────────┐         │         ┌─────────────────┐
-    │ Notification    │         │         │   AI Agent      │
-    │   Service       │         │         │  (Port 8004)    │
-    │ (Port 8003)     │         │         │   Python +      │
-    │  Symfony 7      │         │         │     MCP         │
-    └─────────────────┘         │         └─────────────────┘
-                                │
-                    ┌─────────────────┐
-                    │  NATS Server    │
-                    │  (Pub/Sub)      │
-                    │  Port 4222      │
-                    └─────────────────┘
-```
+### Prerequisites
+- macOS or Linux
+- Docker installed
+- Git installed
 
-## 🚀 Key Features
-
-- **Natural Language Task Creation**: "Hey AI, add a task to review the quarterly report by Friday"
-- **Smart Task Prioritization**: AI analyzes deadlines and importance
-- **Real-time Notifications**: Cross-service event-driven updates
-- **Microservices Communication**: Services communicate via NATS pub/sub
-- **AI-Powered Insights**: Task analytics and productivity suggestions
-
-## 📋 Prerequisites
-
-Make sure you have the following installed:
-- **macOS** (this guide is macOS-specific)
-- **Python 3** and **UV** package manager
-- **PHP 8.4** and **Composer**
-- **Symfony CLI**
-- **Docker** and **Docker Compose**
-- **Git**
-- **VSCode** (recommended editor)
-
-## 🛠️ Quick Setup
-
-### 1. Clone and Setup Environment
+### Installation
 
 ```bash
-# Clone the repository
+# 1. Clone and enter the project
 git clone https://github.com/amirhosseindz/ai-task-manager.git
 cd ai-task-manager
 
-# Run the setup script to create environment files
-./setup-env.sh
+# 2. Quick setup (creates all config files)
+chmod +x setup.sh
+./setup.sh
+
+# 3. Add your OpenAI API key
+echo "OPENAI_API_KEY=your_openai_key_here" >> .env
+
+# 4. Start everything
+docker-compose up -d  # Database
+cd symfony-app && symfony server:start -d --port=8000  # Main app
+cd ../ai-agent && python -m uvicorn main:app --port=8004  # AI agent
 ```
 
-### 2. Configure Your Credentials
-
-Edit the generated `.env` files with your actual credentials:
+### Test it works
 
 ```bash
-# Main infrastructure secrets
-vim .env
+# Create a user
+curl -X POST http://localhost:8000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John", "email": "john@example.com"}'
 
-# Add your OpenAI API key
+# Talk to AI (replace USER_ID with the ID from above)
+curl -X POST http://localhost:8004/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Add a task to buy groceries tomorrow", "user_id": 1}'
+```
+
+## 🎮 How to Play With It
+
+### 1. Web Interface (Coming Soon!)
+Visit `http://localhost:8000` for a simple web UI.
+
+### 2. Chat with AI via API
+
+```bash
+# Natural language task creation
+curl -X POST http://localhost:8004/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Schedule a meeting with the team next Friday at 2 PM",
+    "user_id": 1
+  }'
+
+# Ask for task insights
+curl -X POST http://localhost:8004/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "What should I work on today?",
+    "user_id": 1
+  }'
+```
+
+### 3. Direct API Calls
+
+```bash
+# Get all tasks
+curl http://localhost:8000/api/tasks
+
+# Create task manually
+curl -X POST http://localhost:8000/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Learn AI",
+    "description": "Study machine learning basics",
+    "due_date": "2024-12-31",
+    "priority": "high"
+  }'
+```
+
+## 🛠️ Development Mode
+
+Want to hack on it? Here's how to run in development:
+
+```bash
+# Install dependencies
+cd symfony-app && composer install
+cd ../ai-agent && pip install -r requirements.txt
+
+# Run with hot reload
+symfony server:start --port=8000  # Symfony with auto-reload
+uvicorn main:app --reload --port=8004  # AI agent with hot reload
+```
+
+## 📱 API Endpoints
+
+### Main App (Port 8000)
+- `GET /api/tasks` - List all tasks
+- `POST /api/tasks` - Create new task
+- `GET /api/users` - List users
+- `POST /api/users` - Create user
+
+### AI Agent (Port 8004)
+- `POST /chat` - Chat with AI
+- `GET /health` - Health check
+
+## 🔧 Configuration
+
+Edit `.env` files to customize:
+
+```bash
+# Main app config
+vim symfony-app/.env
+
+# AI agent config (add your OpenAI key here!)
 vim ai-agent/.env
 ```
 
-### 3. Start Infrastructure Services
-
-```bash
-# Start NATS, PostgreSQL, and Redis
-docker-compose up -d
-
-# Verify services are running
-curl http://localhost:8222/varz  # NATS monitoring
-docker-compose exec postgres psql -U dev_user -d task_manager -c "SELECT version();"
-```
-
-### 4. Install Dependencies
-
-```bash
-# Install Symfony dependencies for each service
-cd services/user-service && composer install && cd ../..
-cd services/task-service && composer install && cd ../..
-cd services/notification-service && composer install && cd ../..
-cd services/api-gateway && composer install && cd ../..
-
-# Install Python dependencies for AI agent
-cd ai-agent
-source .venv/bin/activate
-uv pip install -r requirements.txt
-cd ..
-```
-
-### 5. Run Database Migrations
-
-```bash
-# Create and run migrations for each service that uses the database
-cd services/user-service
-php bin/console doctrine:database:create --if-not-exists
-php bin/console make:migration
-php bin/console doctrine:migrations:migrate -n
-cd ../..
-
-cd services/task-service  
-php bin/console doctrine:database:create --if-not-exists
-php bin/console make:migration
-php bin/console doctrine:migrations:migrate -n
-cd ../..
-```
-
-## 🏃‍♂️ Running the Application
-
-### Start All Services
-
-```bash
-# Terminal 1: User Service
-cd services/user-service
-symfony server:start --port=8001
-
-# Terminal 2: Task Service  
-cd services/task-service
-symfony server:start --port=8002
-
-# Terminal 3: Notification Service
-cd services/notification-service
-symfony server:start --port=8003
-
-# Terminal 4: API Gateway
-cd services/api-gateway
-symfony server:start --port=8000
-
-# Terminal 5: AI Agent
-cd ai-agent
-source .venv/bin/activate
-uvicorn main:app --host 0.0.0.0 --port 8004 --reload
-```
-
-### Verify Everything is Running
-
-```bash
-curl http://localhost:8000/health  # API Gateway
-curl http://localhost:8001/health  # User Service
-curl http://localhost:8002/health  # Task Service
-curl http://localhost:8003/health  # Notification Service
-curl http://localhost:8004/health  # AI Agent
-```
-
-## 📁 Project Structure
-
-```
-ai-task-manager/
-├── services/
-│   ├── user-service/           # User authentication & profiles
-│   ├── task-service/           # Task CRUD operations
-│   ├── notification-service/   # Email/SMS notifications
-│   └── api-gateway/            # Request routing & CORS
-├── ai-agent/                   # Python AI agent with MCP
-├── docker-compose.yml          # Infrastructure services
-├── .env                        # Infrastructure secrets
-├── .env.example                # Environment template
-├── setup-env.sh                # Environment setup script
-├── .gitignore                  # Git ignore rules
-└── docs/                       # Documentation
-```
-
-## 🔧 Development Workflow
-
-### Adding a New Feature
-
-1. **Create the API endpoint** in the appropriate Symfony service
-2. **Publish events** via NATS when data changes
-3. **Subscribe to events** in other services that need to react
-4. **Update the AI agent** to handle new functionality
-5. **Test the integration** across services
-
-### Example: Adding Task Priority Feature
-
-```php
-// In Task Service
-$this->eventBus->publish('task.priority.changed', [
-    'taskId' => $task->getId(),
-    'newPriority' => $priority,
-    'userId' => $task->getUserId()
-]);
-```
-
-```python
-# In AI Agent
-@nats_subscriber('task.priority.changed')
-async def analyze_priority_change(event_data):
-    # AI analyzes the priority change and suggests optimizations
-    suggestions = await generate_priority_suggestions(event_data)
-    await publish_ai_insights(suggestions)
-```
-
-## 🔒 Security Best Practices
-
-- ✅ **Environment files are gitignored** - no secrets in version control
-- ✅ **Service isolation** - each service only gets secrets it needs
-- ✅ **Least privilege principle** - minimal access per service
-- ✅ **Separate development/production configs**
-
-## 🧪 Testing
-
-```bash
-# Run tests for individual services
-cd services/user-service && php bin/phpunit
-cd services/task-service && php bin/phpunit
-
-# Run AI agent tests
-cd ai-agent && python -m pytest
-```
-
-## 📚 API Documentation
-
-Once the services are running, API documentation will be available at:
-- API Gateway: http://localhost:8000/api/doc
-- User Service: http://localhost:8001/api/doc  
-- Task Service: http://localhost:8002/api/doc
-
-## 🤖 AI Agent Features
-
-The AI agent integrates with various MCP servers to provide:
-- **File System Access** - Read/write project files
-- **Calendar Integration** - Schedule tasks and deadlines
-- **Database Queries** - Generate insights and analytics
-- **Natural Language Processing** - Understand user requests
-
 ## 🐛 Troubleshooting
 
-### Common Issues
-
-**NATS Connection Failed:**
+**Nothing works?**
 ```bash
-docker-compose logs nats
-docker-compose restart nats
+# Check if services are running
+curl http://localhost:8000/health
+curl http://localhost:8004/health
+
+# Restart everything
+docker-compose restart
+symfony server:stop && symfony server:start -d
 ```
 
-**Database Connection Issues:**
+**AI not responding?**
+- Make sure you added your OpenAI API key to `ai-agent/.env`
+- Check AI agent logs: `tail -f ai-agent/logs/app.log`
+
+**Database issues?**
 ```bash
-docker-compose logs postgres
-# Check your DATABASE_URL in service .env files
+# Reset database
+cd symfony-app
+php bin/console doctrine:database:drop --force
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
 ```
 
-**Services Not Starting:**
-```bash
-# Check if ports are in use
-lsof -i :8000  # API Gateway
-lsof -i :8001  # User Service
-# Kill processes if necessary
-```
+## 🎯 Cool Things to Try
 
-**AI Agent Import Errors:**
-```bash
-cd ai-agent
-source .venv/bin/activate
-pip list  # Verify dependencies
-```
+1. **Smart Scheduling**: "Plan my week with 3 important tasks"
+2. **Context Awareness**: "Move my Monday meeting to Tuesday"
+3. **Priority Management**: "What's the most urgent thing I should do?"
+4. **Natural Deadlines**: "Remind me to submit the report before the weekend"
+
+## 🏗️ Architecture
+
+Simple but powerful:
+- **Symfony 7** - Main web application 
+- **Python FastAPI** - AI agent with OpenAI integration
+- **PostgreSQL** - Data storage
+- **Docker** - Easy infrastructure
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This is a weekend project, but PRs welcome! 
+
+1. Fork it
+2. Create feature branch
+3. Make it awesome  
+4. Submit PR
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT - Do whatever you want with it!
 
-## 🙏 Acknowledgments
+---
 
-- Built with [Symfony 7](https://symfony.com/)
-- Powered by [NATS](https://nats.io/) for messaging
-- AI integration via [OpenAI API](https://openai.com/api/)
-- MCP servers for extended functionality
+**Questions?** Open an issue or just hack away! 🚀

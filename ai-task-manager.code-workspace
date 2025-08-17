@@ -5,20 +5,8 @@
             "path": "."
         },
         {
-            "name": "User Service",
-            "path": "./services/user-service"
-        },
-        {
-            "name": "Task Service", 
-            "path": "./services/task-service"
-        },
-        {
-            "name": "Notification Service",
-            "path": "./services/notification-service"
-        },
-        {
-            "name": "API Gateway",
-            "path": "./services/api-gateway"
+            "name": "Symfony App", 
+            "path": "./symfony-app"
         },
         {
             "name": "AI Agent",
@@ -26,6 +14,7 @@
         }
     ],
     "settings": {
-        "python.defaultInterpreterPath": "./ai-agent/.venv/bin/python"
+        "python.defaultInterpreterPath": "./ai-agent/.venv/bin/python",
+        "symfony-vscode.consolePath": "./symfony-app/bin/console"
     }
 }

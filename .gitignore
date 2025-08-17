@@ -1,6 +1,6 @@
 # Environment files (default ignore all)
 **/.env*
-
+.env
 # But explicitly allow example files
 !**/.env.example
 !**/.env.dist
