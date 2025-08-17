@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Task\Repository;
 
 use App\Task\Entity\Task;
 use App\Task\Enum\TaskPriority;
