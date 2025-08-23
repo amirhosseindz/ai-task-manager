@@ -98,6 +98,9 @@ APP_SECRET=$(openssl rand -hex 16)
 # Database
 DATABASE_URL=postgresql://$db_user:$db_password@localhost:5432/task_manager?serverVersion=15&charset=utf8
 
+# NATS messaging
+NATS_URL=nats://localhost:4222
+
 # Redis (for caching and sessions)
 REDIS_URL=redis://:$redis_password@localhost:6379/0
 
@@ -122,8 +125,11 @@ EOF_SYMFONY
 # AI Agent Environment
 OPENAI_API_KEY=$openai_key
 
+# NATS messaging
+NATS_URL=nats://localhost:4222
+
 # Symfony App Integration
-SYMFONY_API_URL=http://localhost:8000
+SYMFONY_API_URL=http://localhost:8002/api
 
 # Database (for direct analytics queries)
 DATABASE_URL=postgresql://$db_user:$db_password@localhost:5432/task_manager
