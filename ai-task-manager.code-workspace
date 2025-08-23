@@ -16,5 +16,8 @@
     "settings": {
         "python.defaultInterpreterPath": "./ai-agent/.venv/bin/python",
         "symfony-vscode.consolePath": "./symfony-app/bin/console"
+    },
+    "extensions": {
+        "recommendations": ["TheNouillet.symfony-vscode"]
     }
 }

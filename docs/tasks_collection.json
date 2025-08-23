@@ -1,0 +1,147 @@
+{
+  "v": 9,
+  "name": "Tasks",
+  "folders": [],
+  "requests": [
+    {
+      "v": "15",
+      "name": "Test health endpoint",
+      "endpoint": "http://localhost:8002/api/tasks/health",
+      "method": "GET",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {}
+    },
+    {
+      "v": "15",
+      "name": "List all tasks",
+      "endpoint": "http://localhost:8002/api/tasks",
+      "method": "GET",
+      "params": [
+        {
+          "key": "user_id",
+          "value": "1",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {}
+    },
+    {
+      "v": "15",
+      "name": "Create a test task",
+      "endpoint": "http://localhost:8002/api/tasks",
+      "method": "POST",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "body": "{\n  \"title\": \"Test Task\",\n  \"description\": \"This is a test task\",\n  \"priority\": \"high\",\n  \"status\": \"todo\",\n  \"due_date\": \"2025-08-20 15:00:00\",\n  \"user_id\": 1\n}",
+        "contentType": "application/json"
+      },
+      "requestVariables": [],
+      "responses": {}
+    },
+    {
+      "v": "15",
+      "name": "Get task stats",
+      "endpoint": "http://localhost:8002/api/tasks/stats",
+      "method": "GET",
+      "params": [
+        {
+          "key": "user_id",
+          "value": "1",
+          "active": true,
+          "description": ""
+        }
+      ],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {}
+    },
+    {
+      "v": "15",
+      "name": "Update a task",
+      "endpoint": "http://localhost:8002/api/tasks/1",
+      "method": "PUT",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "body": "{\n  \"status\": \"in_progress\",\n  \"priority\": \"medium\"\n}",
+        "contentType": "application/json"
+      },
+      "requestVariables": [],
+      "responses": {}
+    },
+    {
+      "v": "15",
+      "name": "Get a task",
+      "endpoint": "http://localhost:8002/api/tasks/3",
+      "method": "GET",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {}
+    }
+  ],
+  "headers": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "_ref_id": "coll_meoatv3v_fc3eab0f-50de-43a9-a79c-d008ddadffe0"
+}
