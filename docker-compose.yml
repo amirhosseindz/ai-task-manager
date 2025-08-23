@@ -10,6 +10,8 @@ services:
     image: natsio/nats-box:latest
     depends_on:
       - nats
+    environment:
+      - NATS_URL=nats://nats:4222
     command: tail -f /dev/null
 
   postgres:
